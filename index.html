@@ -1,0 +1,191 @@
+file_0000000059147209b0c716bb5550d673.png
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MR DEVIL | Official</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+text-align:center;
+}
+
+header{
+padding:40px 20px;
+background:linear-gradient(135deg,#000000,#2b0050);
+}
+
+.logo{
+width:150px;
+height:150px;
+border-radius:50%;
+box-shadow:0 0 25px #ff00ff;
+}
+
+h1{
+color:#ff00ff;
+margin-top:15px;
+}
+
+.btn{
+display:inline-block;
+padding:12px 25px;
+margin:10px;
+border-radius:25px;
+text-decoration:none;
+font-weight:bold;
+color:white;
+transition:0.3s;
+}
+
+.youtube{background:red;}
+.discord{background:#5865F2;}
+.instagram{background:#E1306C;}
+
+.btn:hover{
+transform:scale(1.1);
+}
+
+section{
+padding:40px 20px;
+}
+
+input,textarea{
+width:90%;
+max-width:400px;
+padding:10px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+}
+
+button{
+padding:10px 20px;
+border:none;
+border-radius:20px;
+background:#ff00ff;
+color:white;
+cursor:pointer;
+}
+
+footer{
+padding:20px;
+background:#111;
+margin-top:40px;
+}
+
+.admin{
+display:none;
+background:#111;
+padding:20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<img src="logo.png" class="logo">
+<h1>🔥 MR DEVIL 🔥</h1>
+
+<a href="https://youtube.com/@mr.devil0ss?si=HuadKnBTJI6ZKV48" target="_blank" class="btn youtube">Subscribe YouTube</a>
+
+<a href="https://discord.com/invite/2UesXBArV" target="_blank" class="btn discord">Join Discord</a>
+
+<a href="https://www.instagram.com/mr.devil0ss?igsh=aHgxZHB4bXc3eTJ0" target="_blank" class="btn instagram">Follow Instagram</a>
+
+</header>
+
+<section>
+<h2>💬 Ask Me Question</h2>
+
+<input type="text" id="name" placeholder="Your Name">
+<br>
+<textarea id="message" placeholder="Your Question"></textarea>
+<br>
+<button onclick="saveMessage()">Send</button>
+</section>
+
+<section>
+<h2>🖼 Upload Photo</h2>
+<input type="file" accept="image/*">
+</section>
+
+<section>
+<h2>👑 Creator Login</h2>
+<input type="password" id="adminPass" placeholder="Enter Creator Password">
+<br>
+<button onclick="adminLogin()">Login</button>
+</section>
+
+<section class="admin" id="adminPanel">
+<h2>📩 Messages</h2>
+<div id="messages"></div>
+</section>
+
+<footer>
+© 2026 MR DEVIL | All Rights Reserved
+</footer>
+
+<script>
+function saveMessage(){
+let name=document.getElementById("name").value;
+let msg=document.getElementById("message").value;
+
+if(name==""||msg==""){
+alert("Fill all fields");
+return;
+}
+
+let messages=JSON.parse(localStorage.getItem("messages"))||[];
+messages.push({name:name,msg:msg});
+localStorage.setItem("messages",JSON.stringify(messages));
+
+alert("Message Sent!");
+document.getElementById("name").value="";
+document.getElementById("message").value="";
+}
+
+function adminLogin(){
+let pass=document.getElementById("adminPass").value;
+
+if(pass==="mrdevil123"){   // 🔥 Change this password
+document.getElementById("adminPanel").style.display="block";
+loadMessages();
+}else{
+alert("Wrong Password");
+}
+}
+
+function loadMessages(){
+let messages=JSON.parse(localStorage.getItem("messages"))||[];
+let output="";
+messages.forEach(function(m){
+output+="<p><b>"+m.name+"</b>: "+m.msg+"</p>";
+});
+document.getElementById("messages").innerHTML=output;
+}
+</script>
+
+</body>
+</html>
+if(pass==="@Mr.Devil1")
+<script>
+function adminLogin(){
+let pass=document.getElementById("adminPass").value.trim();
+
+const correctPassword = "@Mr.Devil1"; // 🔥 @Mr.Devil1
+
+if(pass === correctPassword){
+document.getElementById("adminPanel").style.display="block";
+loadMessages();
+alert("Welcome Creator 😈");
+}else{
+alert("Wrong Password");
+}
+}
+</script>
