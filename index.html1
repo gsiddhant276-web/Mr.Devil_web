@@ -1,0 +1,110 @@
+<script>
+
+// ====== 🔐 SECURITY CONFIG ======
+const secretKeyHash = "e99a18c428cb38d5f260853678922e03"; 
+// This is MD5 of "mrdevil123"
+// If you change password, tell me I will generate new hash.
+
+// ====== HASH FUNCTION ======
+async function hashPassword(password){
+const msgBuffer = new TextEncoder().encode(password);
+const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+const hashArray = Array.from(new Uint8Array(hashBuffer));
+return hashArray.map(b => b.toString(16).padStart(2,"0")).join("");
+}
+
+// ====== LOGIN SYSTEM ======
+async function adminLogin(){
+
+let pass = document.getElementById("adminPass").value.trim();
+
+if(pass === ""){
+alert("Enter Password");
+return;
+}
+
+let hashed = await hashPassword(pass);
+
+if(hashed === secretKeyHash){
+sessionStorage.setItem("creatorLoggedIn","true");
+showAdminPanel();
+alert("Welcome Creator 😈");
+}else{
+alert("Wrong Password");
+}
+
+}
+
+// ====== SHOW PANEL ======
+function showAdminPanel(){
+if(sessionStorage.getItem("creatorLoggedIn") === "true"){
+document.getElementById("adminPanel").style.display="block";
+loadMessages();
+}
+}
+
+// ====== AUTO LOAD LOGIN ======
+window.onload = function(){
+showAdminPanel();
+}
+
+// ====== LOGOUT ======
+function logout(){
+sessionStorage.removeItem("creatorLoggedIn");
+document.getElementById("adminPanel").style.display="none";
+alert("Logged Out");
+}
+
+// ====== MESSAGE SYSTEM ======
+function saveMessage(){
+
+let name=document.getElementById("name").value;
+let msg=document.getElementById("message").value;
+
+if(name==""||msg==""){
+alert("Fill all fields");
+return;
+}
+
+let messages=JSON.parse(localStorage.getItem("messages"))||[];
+messages.push({name:name,msg:msg});
+localStorage.setItem("messages",JSON.stringify(messages));
+
+alert("Message Sent!");
+document.getElementById("name").value="";
+document.getElementById("message").value="";
+}
+
+function loadMessages(){
+let messages=JSON.parse(localStorage.getItem("messages"))||[];
+let output="";
+
+messages.forEach(function(m,index){
+output += `
+<div style="background:#1a1a1a;padding:10px;margin:10px;border-radius:10px;">
+<b>${m.name}</b>: ${m.msg}
+<br>
+<button onclick="deleteMessage(${index})">Delete</button>
+</div>
+`;
+});
+
+document.getElementById("messages").innerHTML=output;
+}
+
+function deleteMessage(index){
+let messages=JSON.parse(localStorage.getItem("messages"))||[];
+messages.splice(index,1);
+localStorage.setItem("messages",JSON.stringify(messages));
+loadMessages();
+}
+
+function clearAll(){
+localStorage.removeItem("messages");
+loadMessages();
+}
+
+</script>
+<section class="admin" id="adminPanel">
+  <button onclick="logout()">Logout</button>
+<button onclick="clearAll()">Clear All Messages</button>
