@@ -1,0 +1,173 @@
+<iframe src="https://discord.com/widget?id=YOUR_SERVER_ID&theme=dark" 
+width="300" height="400" allowtransparency="true" frameborder="0">
+</iframe>
+<script>
+
+// ===============================
+// 🔐 CONFIG
+// ===============================
+const CREATOR_PASSWORD = "mrdevil123"; // change
+const ADMIN_URL_KEY = "devil";
+
+// ===============================
+// 🌌 Animated Background
+// ===============================
+const canvas = document.createElement("canvas");
+document.body.appendChild(canvas);
+canvas.style.position="fixed";
+canvas.style.top=0;
+canvas.style.left=0;
+canvas.style.zIndex="-1";
+
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles=[];
+for(let i=0;i<80;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2,
+d:Math.random()*1
+});
+}
+
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(255,0,255,0.7)";
+particles.forEach(p=>{
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fill();
+p.y+=p.d;
+if(p.y>canvas.height){p.y=0;}
+});
+requestAnimationFrame(animate);
+}
+animate();
+
+// ===============================
+// 📊 Visitor Counter
+// ===============================
+let visits = localStorage.getItem("visits") || 0;
+visits++;
+localStorage.setItem("visits", visits);
+
+const counter = document.createElement("div");
+counter.innerHTML="👁 Visitors: "+visits;
+counter.style.position="fixed";
+counter.style.top="10px";
+counter.style.right="10px";
+counter.style.background="#111";
+counter.style.padding="10px";
+counter.style.borderRadius="10px";
+document.body.appendChild(counter);
+
+// ===============================
+// 🔥 Hidden Admin URL
+// ===============================
+window.onload=function(){
+const params = new URLSearchParams(window.location.search);
+if(params.get(ADMIN_URL_KEY)==="admin"){
+let pass = prompt("Enter Creator Password");
+if(pass===CREATOR_PASSWORD){
+sessionStorage.setItem("creator","true");
+alert("Welcome Creator 😈");
+showAdmin();
+}else{
+alert("Access Denied");
+}
+}
+if(sessionStorage.getItem("creator")==="true"){
+showAdmin();
+}
+checkNewMessage();
+}
+
+// ===============================
+// 💬 Message System
+// ===============================
+function saveMessage(){
+let name=document.getElementById("name").value;
+let msg=document.getElementById("message").value;
+
+if(!name||!msg){alert("Fill all fields");return;}
+
+let messages=JSON.parse(localStorage.getItem("messages"))||[];
+
+messages.push({
+name:name,
+msg:msg,
+reply:"",
+hearted:false
+});
+
+localStorage.setItem("messages",JSON.stringify(messages));
+
+alert("Message Sent!");
+checkNewMessage();
+}
+
+function showAdmin(){
+document.getElementById("adminPanel").style.display="block";
+loadMessages();
+}
+
+function loadMessages(){
+let messages=JSON.parse(localStorage.getItem("messages"))||[];
+let output="";
+
+messages.forEach((m,i)=>{
+output+=`
+<div style="background:#1a1a1a;padding:15px;margin:15px;border-radius:10px;">
+<b>${m.name}</b>: ${m.msg}
+<br><br>
+❤️ ${m.hearted?"Yes":"No"}
+<br><br>
+Reply: ${m.reply || "No reply yet"}
+<br><br>
+<button onclick="heartMessage(${i})">Heart</button>
+<button onclick="replyMessage(${i})">Reply</button>
+<button onclick="deleteMessage(${i})">Delete</button>
+</div>
+`;
+});
+document.getElementById("messages").innerHTML=output;
+}
+
+function heartMessage(i){
+let messages=JSON.parse(localStorage.getItem("messages"))||[];
+messages[i].hearted=true;
+localStorage.setItem("messages",JSON.stringify(messages));
+loadMessages();
+}
+
+function replyMessage(i){
+let reply = prompt("Enter Reply:");
+let messages=JSON.parse(localStorage.getItem("messages"))||[];
+messages[i].reply=reply;
+localStorage.setItem("messages",JSON.stringify(messages));
+loadMessages();
+}
+
+function deleteMessage(i){
+let messages=JSON.parse(localStorage.getItem("messages"))||[];
+messages.splice(i,1);
+localStorage.setItem("messages",JSON.stringify(messages));
+loadMessages();
+}
+
+// ===============================
+// 🔔 New Message Notification
+// ===============================
+function checkNewMessage(){
+if(Notification.permission==="granted"){
+new Notification("New Message Received 🔥");
+}else if(Notification.permission!=="denied"){
+Notification.requestPermission();
+}
+}
+
+    </script>
+    yoursite.com/?devil=admin
